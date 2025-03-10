@@ -1,0 +1,38 @@
+pipeline {
+    agent any  // Runs on any available agent
+
+    environment {
+        MAVEN_HOME = "/usr/share/maven"  // Set Maven path if required
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ramsettysaikrishna/spring-boot'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('jenkinsdemo') {   // Change directory to jenkinsdemo
+                    bat './mvnw clean package'  // Use wrapper to ensure Maven runs correctly
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('jenkinsdemo') {
+                    bat './mvnw test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Deploying application..."
+                // Add deployment commands here
+            }
+        }
+    }
+}
